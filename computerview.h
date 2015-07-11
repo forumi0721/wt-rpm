@@ -12,30 +12,27 @@ private:
 	Wt::WString _computerName;
 	bool _ledStatus;
 	bool _powerStatus;
-	bool _atxStatus;
-
-	Wt::WPushButton *_btn_atx_force_off;
-	Wt::WPushButton *_btn_atx_force_on;
-	Wt::WPushButton *_btn_atx_reset;
 
 	Wt::WPushButton *_btn_pw_switch_press;
 	Wt::WPushButton *_btn_pw_switch_force_off;
+	Wt::WPushButton *_btn_reset_switch_press;
 
 	Wt::WImage *_img_led;
+#ifdef USE_PING
 	Wt::WText *_ping_txt;
+#endif
 	Wt::WTextArea *_logs_edit;
 
 	std::shared_ptr<Wt::WFileResource> _ico_led_on_file;
 	std::shared_ptr<Wt::WFileResource> _ico_led_off_file;
+#ifdef USE_PING
 	std::shared_ptr<Wt::WFileResource> _ico_ping_file;
-	std::shared_ptr<Wt::WFileResource> _ico_atx_pwr_file;
+#endif
 	std::shared_ptr<Wt::WFileResource> _ico_pwr_switch_file;
 
-	void btn_atx_force_off_clicked();
-	void btn_atx_force_on_clicked();
-	void btn_atx_reset_clicked();
 	void btn_pw_switch_press_clicked();
 	void btn_pw_switch_force_off_clicked();
+	void btn_reset_switch_press_clicked();
 
 	Wt::WFileResource *getImg(const Wt::WString &name);
 	void setPowerLedStatus(bool status);
@@ -50,14 +47,14 @@ public:
 	/* slots */
 	void powerLedStatusChanged(bool status);
 	void consoleDataAdded(const Wt::WString &data);
+#ifdef USE_PING
 	void setPingDelay(double delay);
+#endif
 
 	/* signals */
-	boost::signals2::signal<void ()> sig_atxForceOff;
-	boost::signals2::signal<void ()> sig_atxForceOn;
-	boost::signals2::signal<void ()> sig_atxReset;
 	boost::signals2::signal<void ()> sig_pwSwitchPress;
 	boost::signals2::signal<void ()> sig_pwSwitchForceOff;
+	boost::signals2::signal<void ()> sig_resetSwitchPress;
 };
 
 #endif // COMPUTERVIEW_H

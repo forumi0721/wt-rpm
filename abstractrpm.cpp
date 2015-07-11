@@ -58,8 +58,8 @@ bool AbstractRPM::parseComputer(Wt::Json::Object &computer)
 	Wt::Json::Object powerSwitch = readJSONValue<Wt::Json::Object>(computer, "power_switch_gpio");
 	c.powerSwitch = parseGpio(powerSwitch);
 
-	Wt::Json::Object atxSwitch = readJSONValue<Wt::Json::Object>(computer, "atx_switch_gpio");
-	c.atxSwitch = parseGpio(atxSwitch);
+	Wt::Json::Object resetSwitch = readJSONValue<Wt::Json::Object>(computer, "reset_switch_gpio");
+	c.resetSwitch = parseGpio(resetSwitch);
 
 	Wt::Json::Array read_acl = readJSONValue<Wt::Json::Array>(computer, "read_acl");
 	for (size_t i = 0; i < read_acl.size(); i++)
@@ -242,7 +242,7 @@ void AbstractRPM::setPowerLedState(const Wt::WString &computerName, bool state)
 	viewsLock.unlock();
 
 	/* add some logs */
-	Wt::WString msg = "The power LED went " + Wt::WString(state?"ON":"OFF");
+	Wt::WString msg = "The Power LED went " + Wt::WString(state?"ON":"OFF");
 	consoleAddData(computerName, msg);
 }
 
@@ -272,6 +272,7 @@ void AbstractRPM::consoleAddData(const Wt::WString &computerName, const Wt::WStr
 	viewsLock.unlock();
 }
 
+#ifdef USE_PING
 void AbstractRPM::setPingDelay(const Wt::WString &computerName, double delay)
 {
 	viewsLock.lock();
@@ -283,6 +284,7 @@ void AbstractRPM::setPingDelay(const Wt::WString &computerName, double delay)
 	}
 	viewsLock.unlock();
 }
+#endif
 
 void AbstractRPM::addView(View *view)
 {
@@ -309,11 +311,9 @@ void AbstractRPM::addView(View *view)
 		std::shared_ptr<ComputerView> computer(new ComputerView(view, computerName, writeAccess));
 
 		/* view --> backend */
-		computer->sig_atxForceOff.connect(boost::bind(&AbstractRPM::atx_force_off, this, computerName));
-		computer->sig_atxForceOn.connect(boost::bind(&AbstractRPM::atx_force_on, this, computerName));
-		computer->sig_atxReset.connect(boost::bind(&AbstractRPM::atx_reset, this, computerName));
 		computer->sig_pwSwitchPress.connect(boost::bind(&AbstractRPM::pw_switch_press, this, computerName));
 		computer->sig_pwSwitchForceOff.connect(boost::bind(&AbstractRPM::pw_switch_force_off, this, computerName));
+		computer->sig_resetSwitchPress.connect(boost::bind(&AbstractRPM::reset_switch_press, this, computerName));
 
 		/* send the current logs */
 		Wt::WString logs = _computerLogs[computerName];
@@ -340,56 +340,6 @@ bool AbstractRPM::deleteView(std::string sessionId)
 	return ret;
 }
 
-void AbstractRPM::atx_force_off(const Wt::WString &computerName)
-{
-	const Computer *computer = findComputer(computerName);
-	if (!computer) {
-		consoleAddData(computerName, "Unknown computer '" + computerName + "'");
-		return;
-	}
-
-	if (!currentUserIsInAccessList(computerName, WRITE))
-		return;
-
-	writeGPIO(computer->atxSwitch, 1);
-
-	consoleAddData(computerName, "ATX force off");
-}
-
-void AbstractRPM::atx_force_on(const Wt::WString &computerName)
-{
-	const Computer *computer = findComputer(computerName);
-	if (!computer) {
-		consoleAddData(computerName, "Unknown computer '" + computerName + "'");
-		return;
-	}
-
-	if (!currentUserIsInAccessList(computerName, WRITE))
-		return;
-
-	writeGPIO(computer->atxSwitch, 0);
-
-	consoleAddData(computerName, "ATX force on");
-}
-
-void AbstractRPM::atx_reset(const Wt::WString &computerName)
-{
-	const Computer *computer = findComputer(computerName);
-	if (!computer) {
-		consoleAddData(computerName, "Unknown computer '" + computerName + "'");
-		return;
-	}
-
-	if (!currentUserIsInAccessList(computerName, WRITE))
-		return;
-
-	writeGPIO(computer->atxSwitch, 1);
-	sleep(3);
-	writeGPIO(computer->atxSwitch, 0);
-
-	consoleAddData(computerName, "ATX reset");
-}
-
 void AbstractRPM::pw_switch_press(const Wt::WString &computerName)
 {
 	const Computer *computer = findComputer(computerName);
@@ -405,7 +355,7 @@ void AbstractRPM::pw_switch_press(const Wt::WString &computerName)
 	usleep(250000);
 	writeGPIO(computer->powerSwitch, 0);
 
-	consoleAddData(computerName, "Power switch pressed");
+	consoleAddData(computerName, "Power Switch Pressed");
 }
 
 void AbstractRPM::pw_switch_force_off(const Wt::WString &computerName)
@@ -423,7 +373,25 @@ void AbstractRPM::pw_switch_force_off(const Wt::WString &computerName)
 	sleep(10);
 	writeGPIO(computer->powerSwitch, 0);
 
-	consoleAddData(computerName, "Power switch forced off");
+	consoleAddData(computerName, "Power Switch Long Pressed");
+}
+
+void AbstractRPM::reset_switch_press(const Wt::WString &computerName)
+{
+	const Computer *computer = findComputer(computerName);
+	if (!computer) {
+		consoleAddData(computerName, "Unknown computer '" + computerName + "'");
+		return;
+	}
+
+	if (!currentUserIsInAccessList(computerName, WRITE))
+		return;
+
+	writeGPIO(computer->resetSwitch, 1);
+	usleep(250000);
+	writeGPIO(computer->resetSwitch, 0);
+
+	consoleAddData(computerName, "Reset Switch Pressed");
 }
 
 bool AbstractRPM::powerLedState(const Wt::WString &computerName)

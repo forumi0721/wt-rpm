@@ -18,7 +18,7 @@
 View::View(const Wt::WEnvironment& env, std::shared_ptr<Wt::WServer> /*server*/, std::shared_ptr<AbstractRPM> rpm) :
 	Wt::WApplication(env), rpm(rpm)
 {
-	Wt::WString welcomeMsg = "Welcome to the Remote Power Manager (RPM)";
+	Wt::WString welcomeMsg = "Remote Power Manager";
 
 	this->enableUpdates(true);
 	this->setLoadingIndicator(new Wt::WOverlayLoadingIndicator());
@@ -49,8 +49,8 @@ View::View(const Wt::WEnvironment& env, std::shared_ptr<Wt::WServer> /*server*/,
 
 	verticalLayout->addSpacing(50);
 
-	Wt::WLabel *label = new Wt::WLabel("Copyrights 2013 - mupuf.org - This website has been created by mupuf.org developers and is released under a permissive license.");
-	verticalLayout->addWidget(label, 0, Wt::AlignCenter);
+	//Wt::WLabel *label = new Wt::WLabel("Copyrights 2013 - mupuf.org - This website has been created by mupuf.org developers and is released under a permissive license.");
+	//verticalLayout->addWidget(label, 0, Wt::AlignCenter);
 
 	w->setLayout(verticalLayout);
 }
@@ -83,9 +83,10 @@ void View::consoleDataAdded(const Wt::WString &computerName, const Wt::WString &
 	cview->consoleDataAdded(data);
 }
 
+#ifdef USE_PING
 void View::setPingDelay(const Wt::WString &computerName, double delay)
 {
 	std::shared_ptr<ComputerView> cview = getComputer(computerName);
 	cview->setPingDelay(delay);
 }
-
+#endif

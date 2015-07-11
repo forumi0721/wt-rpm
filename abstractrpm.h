@@ -29,7 +29,7 @@ protected:
 
 		Gpio powerLed;
 		Gpio powerSwitch;
-		Gpio atxSwitch;
+		Gpio resetSwitch;
 
 		std::vector<Wt::WString> read_ACL;
 		std::vector<Wt::WString> write_ACL;
@@ -56,7 +56,9 @@ private:
 	bool parseComputer(Wt::Json::Object &computer);
 	Gpio parseGpio(Wt::Json::Object &gpio);
 
+#ifdef USE_PING
 	void setPingDelay(const Wt::WString &computerName, double delay);
+#endif
 	void pollInputs();
 	void pollPings();
 
@@ -81,11 +83,9 @@ public:
 	bool powerLedState(const Wt::WString &computerName);
 
 	/* input events */
-	void atx_force_off(const Wt::WString &computerName);
-	void atx_force_on(const Wt::WString &computerName);
-	void atx_reset(const Wt::WString &computerName);
 	void pw_switch_press(const Wt::WString &computerName);
 	void pw_switch_force_off(const Wt::WString &computerName);
+	void reset_switch_press(const Wt::WString &computerName);
 
 	/* to be re-implemented by the backend */
 	virtual bool gpioIsValid(const struct Gpio &gpio);

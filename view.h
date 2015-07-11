@@ -29,7 +29,9 @@ public:
 	/* slots */
 	void powerLedStatusChanged(const Wt::WString &computerName, bool status);
 	void consoleDataAdded(const Wt::WString &computerName, const Wt::WString &data);
+#ifdef USE_PING
 	void setPingDelay(const Wt::WString &computerName, double delay);
+#endif
 };
 
 #endif // VIEW_H
