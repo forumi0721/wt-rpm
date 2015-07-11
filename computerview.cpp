@@ -30,7 +30,7 @@ void ComputerView::btn_reset_switch_press_clicked()
 
 Wt::WFileResource *ComputerView::getImg(const Wt::WString &name)
 {
-	std::string path = getExeDirectory() + "/../share/wtrpm/" + name.toUTF8();
+	std::string path = getExeDirectory() + "/../share/wt-rpm/" + name.toUTF8();
 	std::string mime = "image/png";
 
 	size_t ext_found = name.toUTF8().find_last_of('.');
