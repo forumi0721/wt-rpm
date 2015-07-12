@@ -7,6 +7,8 @@
 
 #include <Wt/Json/Array>
 #include <Wt/WLocalDateTime>
+#include <Wt/WDate>
+#include <Wt/WTime>
 #include <Wt/WApplication>
 #include <Wt/WEnvironment>
 #include <Wt/Utils>
