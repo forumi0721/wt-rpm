@@ -6,8 +6,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include <Wt/Json/Array>
-#include <Wt/WDate>
-#include <Wt/WTime>
+#include <Wt/WLocalDateTime>
 #include <Wt/WApplication>
 #include <Wt/WEnvironment>
 #include <Wt/Utils>
@@ -248,8 +247,8 @@ void AbstractRPM::setPowerLedState(const Wt::WString &computerName, bool state)
 
 void AbstractRPM::consoleAddData(const Wt::WString &computerName, const Wt::WString &data)
 {
-	Wt::WString date = Wt::WDate::currentServerDate().toString("yyyy/MM/dd");
-	Wt::WString time = Wt::WTime::currentServerTime().toString("hh:mm:ss");
+	Wt::WString date = Wt::WLocalDateTime::currentServerDateTime().date().toString("yyyy/MM/dd");
+	Wt::WString time = Wt::WLocalDateTime::currentServerDateTime().time().toString("hh:mm:ss");
 	std::string user = currentUser();
 	Wt::WString header = date + "-" + time;
 	if (!user.empty())
