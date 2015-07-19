@@ -1,0 +1,58 @@
+{
+	"backend": "rasprpm",
+	"configuration":
+	{
+		"computers":
+		[
+			{
+				"name": "StoneColdPC",
+				"ip_address": "192.168.0.11",
+				"read_acl": ["all"],
+				"write_acl": [],
+
+				"power_led_gpio":
+				{
+					"pin": 18,
+					"inverted": "true"
+				},
+
+				"power_switch_gpio":
+				{
+					"pin": 14,
+					"inverted": "false"
+				},
+
+				"reset_switch_gpio":
+				{
+					"pin": 13,
+					"inverted": "false"
+				}
+
+			},
+			{
+				"name": "StoneColdSVR",
+				"ip_address": "192.168.0.31",
+				"read_acl": ["all"],
+				"write_acl": [],
+
+				"power_led_gpio":
+				{
+					"pin": 20,
+					"inverted": "true"
+				},
+
+				"power_switch_gpio":
+				{
+					"pin": 19,
+					"inverted": "false"
+				},
+
+				"reset_switch_gpio":
+				{
+					"pin": 17,
+					"inverted": "false"
+				}
+			}
+		]
+	}
+}
