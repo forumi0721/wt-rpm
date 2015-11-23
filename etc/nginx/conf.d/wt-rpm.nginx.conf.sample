@@ -1,0 +1,32 @@
+http {
+	include       mime.types;
+	default_type  application/octet-stream;
+
+	keepalive_timeout  65; 
+
+	gzip  on; 
+
+	server {
+		#listen       9090 ssl;
+		listen       9080;
+		server_name  localhost;
+		ssl_certificate /etc/nginx/cert.pem;
+		ssl_certificate_key /etc/nginx/cert.key;
+
+		# Wt
+		location /resources/ {
+			root   /usr/share/Wt/;
+			index  index.html index.htm;
+		}   
+
+		location / { 
+			root   /usr/share/nginx/html;
+			index  index.html index.htm;
+
+			auth_basic "WtRPM";
+			auth_basic_user_file /etc/nginx/htpasswd;
+
+			proxy_pass http://127.0.0.1:9090/;
+		}   
+	}   
+}
