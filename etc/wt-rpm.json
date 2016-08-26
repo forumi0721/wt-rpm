@@ -43,13 +43,13 @@
 
 				"power_switch_gpio":
 				{
-					"pin": 19,
+					"pin": 11,
 					"inverted": "false"
 				},
 
 				"reset_switch_gpio":
 				{
-					"pin": 17,
+					"pin": 10,
 					"inverted": "false"
 				}
 			}
