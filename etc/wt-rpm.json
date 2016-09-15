@@ -31,7 +31,7 @@
 			},
 			{
 				"name": "StoneColdSVR",
-				"ip_address": "192.168.0.31",
+				"ip_address": "192.168.0.21",
 				"read_acl": ["all"],
 				"write_acl": [],
 
