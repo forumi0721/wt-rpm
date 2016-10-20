@@ -12,7 +12,7 @@
 
 				"power_led_gpio":
 				{
-					"pin": 18,
+					"pin": 8,
 					"inverted": "true"
 				},
 
@@ -37,7 +37,7 @@
 
 				"power_led_gpio":
 				{
-					"pin": 20,
+					"pin": 9,
 					"inverted": "true"
 				},
 
