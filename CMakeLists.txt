@@ -71,9 +71,9 @@ endif()
 
 # backends
 option(USE_RASPRPM "Enable the Raspberry Pi RPM backend" ON)
-if(USE_RASPRPM AND EXISTS "/usr/lib/libwiringPi.so")
+if(USE_RASPRPM AND (EXISTS "/usr/lib/libwiringPi.so" AND EXISTS "/usr/lib/libwiringPiDev.so"))
 	add_definitions(-DUSE_RASPRPM=1)
-	set(RASPRPM_LIBRARIES "-lwiringPi")
+	set(RASPRPM_LIBRARIES "-lwiringPi -lwiringPiDev")
 else()
 	set(USE_RASPRPM "OFF")
 endif()
