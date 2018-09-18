@@ -75,6 +75,8 @@ if(USE_RASPRPM AND (EXISTS "/usr/lib/libwiringPi.so" AND EXISTS "/usr/lib/libwir
 	add_definitions(-DUSE_RASPRPM=1)
 	set(RASPRPM_LIBRARIES "-lwiringPi -lwiringPiDev")
 elseif(USE_RASPRPM AND (EXISTS "/usr/local/lib/libwiringPi.so" AND EXISTS "/usr/local/lib/libwiringPiDev.so"))
+	add_definitions(-DUSE_RASPRPM=1)
+	set(RASPRPM_LIBRARIES "-lwiringPi -lwiringPiDev")
 else()
 	set(USE_RASPRPM "OFF")
 endif()
