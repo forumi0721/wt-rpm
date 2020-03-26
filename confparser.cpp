@@ -17,6 +17,8 @@ std::string ConfParser::confFilePossibleLocation (int id)
 	case 2:
 		return "../wt-rpm.json";
 	case 3:
+		return "../etc/wt-rpm.json";
+	case 4:
 		return getenv("HOME") + std::string("/.wt-rpm.json");
 	default:
 		return std::string();
